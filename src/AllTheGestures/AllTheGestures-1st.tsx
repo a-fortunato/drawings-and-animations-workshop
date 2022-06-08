@@ -8,39 +8,23 @@ import Animated, {
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Sticker from "../components/Sticker";
-import { createIdentityMatrix, rotateZ, scale3d, translate3d } from "../components/matrixMath";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
 function Movable({ children }: { children: ReactNode }) {
-  const matrix = useSharedValue(createIdentityMatrix());
+  const position = useSharedValue({ x: 0, y: 0 });
 
   const panGesture = Gesture.Pan().onChange((e) => {
-    matrix.value = translate3d(matrix.value, e.changeX, e.changeY, 0)
+    const { x, y } = position.value;
+    position.value = { x: x + e.changeX, y: y + e.changeY };
   });
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ matrix: matrix.value }],
+    transform: [{ translateX: position.value.x}, { translateY: position.value.y }],
   }));
 
-  const rotateGesture = Gesture.Rotation().onChange((e) => {
-    matrix.value = rotateZ(matrix.value, e.rotationChange, 0, 0, 0);
-  });
-
-  const scaleGesture = Gesture.Pinch().onChange((e) => {
-    matrix.value = scale3d(
-      matrix.value,
-      e.scaleChange,
-      e.scaleChange,
-      1,
-      0,
-      0,
-      0
-    );
-  });
-
   return (
-    <GestureDetector gesture={Gesture.Simultaneous(rotateGesture, scaleGesture, panGesture)}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View>
         <Animated.View style={[{ position: "absolute" }, animatedStyle]}>
           {children}

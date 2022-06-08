@@ -8,7 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Sticker from "../components/Sticker";
-import { createIdentityMatrix, rotateZ, scale3d, translate3d } from "../components/matrixMath";
+import { createIdentityMatrix, translate3d } from "../components/matrixMath";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
@@ -23,24 +23,8 @@ function Movable({ children }: { children: ReactNode }) {
     transform: [{ matrix: matrix.value }],
   }));
 
-  const rotateGesture = Gesture.Rotation().onChange((e) => {
-    matrix.value = rotateZ(matrix.value, e.rotationChange, 0, 0, 0);
-  });
-
-  const scaleGesture = Gesture.Pinch().onChange((e) => {
-    matrix.value = scale3d(
-      matrix.value,
-      e.scaleChange,
-      e.scaleChange,
-      1,
-      0,
-      0,
-      0
-    );
-  });
-
   return (
-    <GestureDetector gesture={Gesture.Simultaneous(rotateGesture, scaleGesture, panGesture)}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View>
         <Animated.View style={[{ position: "absolute" }, animatedStyle]}>
           {children}
