@@ -7,6 +7,8 @@ import {
   Easing,
   Path,
   LinearGradient,
+  Group,
+  vec,
 } from "@shopify/react-native-skia";
 import React from "react";
 import { Dimensions } from "react-native";
@@ -22,19 +24,34 @@ const path = Skia.Path.MakeFromSVGString(
 const PADDING = 32;
 const src = rect(0, 0, 2139, 928);
 const dst = rect(PADDING, PADDING, width - PADDING * 2, height - PADDING * 2);
+const colors = ["#3FCEBC", "#3CBCEB", "#5F96E7", "#816FE3", "#9F5EE2", "#DE589F", "#FF645E", "#FDA859", "#FAEC54", "#9EE671", "#41E08D"];
 
 export const SkiaLogo = () => {
+  const progress = useTiming(
+    { to: 1, loop: true },
+    { duration: 5000, easing: Easing.bezier(0.65, 0, 0.35, 1) }
+  );
+
   return (
     <Canvas style={{ flex: 1 }}>
       <Background />
+      <FitBox src={src} dst={dst}>
       <Path
         path={path}
+        start={0}
+        end={progress}
         style="stroke"
         strokeWidth={116}
         strokeCap="round"
         strokeJoin="round"
         color="white"
-      />
+      >
+        <LinearGradient
+          start={path.getPoint(0)} // start={vec(0, 0)}
+          end={path.getLastPt()} // end={vec(2139, 928)}
+          colors={colors} />
+      </Path>
+      </FitBox>
     </Canvas>
   );
 };

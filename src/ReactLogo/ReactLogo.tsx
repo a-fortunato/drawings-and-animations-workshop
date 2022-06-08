@@ -34,6 +34,16 @@ export const ReactLogo = () => {
   return (
     <Canvas style={{ flex: 1 }}>
       <Fill color="white" />
+      <Circle c={center} r={r} color={c1} />
+      <Group>
+      <Oval rect={rct} color={c1} style="stroke" strokeWidth={strokeWidth} />
+      <Group transform={[ {rotate: -Math.PI/3 }]} origin={center}>
+        <Oval rect={rct} color={c1} style="stroke" strokeWidth={strokeWidth} />
+      </Group>
+      </Group>
+      <Group transform={[ {rotate: Math.PI/3 }]} origin={center}>
+      <Oval rect={rct} color={c1} style="stroke" strokeWidth={strokeWidth} />
+      </Group>
     </Canvas>
   );
 };
