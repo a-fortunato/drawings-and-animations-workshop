@@ -63,11 +63,6 @@ function Toolbar() {
           <Sticker iconName="emoji-events" color="#8ed3ef" />
         </Animated.View>
       </GestureDetector>
-      <Icon
-        style={{ position: 'absolute', bottom: -30, left: -15 }}
-        name='expand-less'
-        size={30}
-      />
     </View>
   );
 }
